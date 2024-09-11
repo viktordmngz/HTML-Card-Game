@@ -1,3 +1,19 @@
+/* --CURRENTLY INCOMPLETE--
+Start Date: 09/09/2024 (MM/DD/YYYY)
+Last Updated: 09/11/2024 (MM/DD/YYYY)
+Originally Coded By: Gavin Lon (https://github.com/GavinLonDigital/HuntTheAceJSGame)
+  Followed the JavaScript Tutorial on YouTube (https://youtu.be/Bj6lC93JMi0?si=IImtSoFegHA4P-Du)
+
+This is part of my development as a web developer. I chose this project as a starting point and will
+be designing my own card game using what I have learned from this tutorial.
+
+While I did follow the tutorial, I did change a few names of the variables and functions because they were
+a little too cumbersome in the video.
+
+Please enjoy and check the original source GitHub repository (linked above) to see if there are any licenses
+on the use of this code.
+*/
+
 :root{
   /* Creating variables */
   --card-width:160px;
@@ -52,6 +68,13 @@ main{
   background-color: burlywood;
 }
 
+/* Centers the cards within their div containers */
+.card-pos-a, .card-pos-b, .card-pos-c, .card-pos-d {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .card{
   /* Holds the card-front and card-back classes */
   position: absolute;
@@ -91,10 +114,14 @@ main{
   height: 100%;
 }
 
-.card-front{
+.card-back{
   transform: rotateY(180deg);
 }
 
 .card:hover .card-inner{
+  transform: rotateY(180deg);
+}
+
+.card-inner.flip-it{
   transform: rotateY(180deg);
 }
