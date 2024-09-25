@@ -1,6 +1,6 @@
-/* --CURRENTLY INCOMPLETE--
+/*
 Start Date: 09/09/2024 (MM/DD/YYYY)
-Last Updated: 09/19/2024 (MM/DD/YYYY)
+Last Updated: 09/25/2024 (MM/DD/YYYY)
 Originally Coded By: Gavin Lon (https://github.com/GavinLonDigital/HuntTheAceJSGame)
   Followed the JavaScript Tutorial on YouTube (https://youtu.be/Bj6lC93JMi0?si=IImtSoFegHA4P-Du)
 
@@ -18,13 +18,15 @@ on the use of this code.
 @import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
 :root{
   /* Creating variables */
-  /* --card-width:15%; */
-  --card-width:160px;
-  /* --card-height: 70%; */
-  --card-height: 220px;
+  --card-width-lg:160px;
+  --card-height-lg: 220px;
+  --card-horizontal-space-lg: 100px;
+  
+  --card-width-sm:100px;
+  --card-height-sm: 150px;;
+  --card-horizontal-space-sm: 50px;
+  
   --num-cards: 4;
-  --card-horizontal-space: 155px;
-  /* --card-horizontal-space: 10.5%; */
   --primary-font: 'Quicksand', sans-serif;
 }
 
@@ -56,7 +58,6 @@ header{
   text-align: center;
 }
 
-
 .header-round-info-container,
 .header-status-info-container,
 .header-button-container,
@@ -67,7 +68,6 @@ header{
   justify-content: center;
   align-items: center;
 }
-
 
 .header-score-container,
 .header-round-container,
@@ -94,7 +94,12 @@ header{
 }
 
 
-/* CSS */
+/* PLAY BUTTON */
+.play-button-container{
+  width: 150px;
+  height: 70px;
+}
+
 .play-button {
   appearance: none;
   background-color: transparent;
@@ -103,7 +108,7 @@ header{
   box-sizing: border-box;
   color: #3B3B3B;
   cursor: pointer;
-  display: inline-block;
+  display: none;
   font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
   font-size: 16px;
   font-weight: 600;
@@ -121,6 +126,17 @@ header{
   touch-action: manipulation;
   width: 100%;
   will-change: transform;
+  animation: game-play-button-fade-in 10s 1;
+}
+
+.play-button:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+@keyframes game-play-button-fade-in {
+    from{opacity: 0;}
+    to{opacity: 1;}
+  
 }
 
 .play-button:disabled {
@@ -134,10 +150,6 @@ header{
   transform: translateY(-2px);
 }
 
-.play-button:active {
-  box-shadow: none;
-  transform: translateY(0);
-}
 
 /* MAIN BODY ELEMENTS */
 main{
@@ -151,7 +163,7 @@ main{
   /* Parent container to hold the card; Used as a buffer */
   position: relative;
   height: 100%;
-  width: calc(var(--card-width) * (var(--num-cards)/2) + var(--card-horizontal-space));
+  width: calc(var(--card-width-lg) * (var(--num-cards)/2) + var(--card-horizontal-space-lg));
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
@@ -191,11 +203,12 @@ main{
   align-items: center;
 }
 
+/* CARD DESIGNS AND STYLING */
 .card{
   /* Holds the card-front and card-back classes */
   position: absolute;
-  height: var(--card-height);
-  width: var(--card-width);
+  height: var(--card-height-lg);
+  width: var(--card-width-lg);
   /* Sets how far the camera is set for the transition */
     /* Try adding and removing 0's (and also increase the transform time): */
   perspective: 1000px;
@@ -240,6 +253,7 @@ main{
   transform: rotateY(180deg);
 } */
 
+/* CARD ANIMATION CLASSES */
 .card-inner.flip-it{
   transform: rotateY(180deg);
 }
@@ -253,4 +267,33 @@ main{
 
 .card.fly-in{
   transform: translateY(-1000px) translateX(-600px) rotate(45deg);
+}
+
+/* Responsive Layouts */
+@media screen and (max-width: 750px){
+    .card{
+      width: var(--card-width-sm);
+      height: var(--card-height-sm);
+    }
+    .card-container{
+      width: calc(var(--card-width-sm) * (var(--num-cards)/2) + var(--card-horizontal-space-sm));
+    }
+    main{
+      height: 50%;
+    }
+    .current-status{
+      font-size: 1.2rem;
+    }
+    .play-button-container{
+      width: 120px;
+      height: 40px;
+    }
+    #playGame{
+      padding: 6px 8px;
+      font-size: 12px;
+      min-height: 40px;
+    }
+    .header-img{
+      height: 55px;
+    }
 }
