@@ -1,6 +1,6 @@
 /*
 Start Date: 09/09/2024 (MM/DD/YYYY)
-Last Updated: 09/24/2024 (MM/DD/YYYY)
+Last Updated: 09/25/2024 (MM/DD/YYYY)
 Originally Coded By: Gavin Lon (https://github.com/GavinLonDigital/HuntTheAceJSGame)
   Followed the JavaScript Tutorial on YouTube (https://youtu.be/Bj6lC93JMi0?si=IImtSoFegHA4P-Du)
 
