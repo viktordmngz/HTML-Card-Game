@@ -1,6 +1,6 @@
-/* --CURRENTLY INCOMPLETE--
+/*
 Start Date: 09/09/2024 (MM/DD/YYYY)
-Last Updated: 09/19/2024 (MM/DD/YYYY)
+Last Updated: 09/24/2024 (MM/DD/YYYY)
 Originally Coded By: Gavin Lon (https://github.com/GavinLonDigital/HuntTheAceJSGame)
   Followed the JavaScript Tutorial on YouTube (https://youtu.be/Bj6lC93JMi0?si=IImtSoFegHA4P-Du)
 
@@ -12,6 +12,7 @@ a little too cumbersome in the video.
 
 Please enjoy and check the original source GitHub repository (linked above) to see if there are any licenses
 on the use of this code.
+
 */
 
 // Create an object array to hold the card image links and their IDs
@@ -62,9 +63,11 @@ let gameInProgress = false;
 let shufflingInProgress = false;
 let cardsRevealed = false;
 let roundNum = 0;
-let totalScore = 0;
-let tempRoundScore = 0;
 const maxRounds = 4;
+let totalScore = 0;
+// let tempRoundScore = 0;
+let gameObj = {}
+const localStorageGameKey = "HTA"
 
 // Game-status element
 const currentGameStateElem = document.querySelector('.current-status');
@@ -85,6 +88,7 @@ function chooseCard(card)
   if (canChooseCard())
   {
     evaluateCardChoice(card)
+    saveGameObjectToLocalStorage(totalScore,roundNum)
     flipCard(card,false)
 
     setTimeout(() => {
@@ -126,7 +130,7 @@ function outputFeedback(hit)
 {
   if (hit)
   {
-    updateStatusElement(currentGameStateElem,"block",winColor,"Nailed It!! - You Win!! :)")
+    updateStatusElement(currentGameStateElem,"block",winColor,"Nailed It!! - Great job! :)")
 
   }
   else
@@ -271,7 +275,7 @@ function gameOver(){
 function loadGame() {
   // Creates the card elements
   createCards();
-
+  cardFlyIn();
   // Fills the array with every element from the HTML
     // Every element belonging to 'card' class
   cards = document.querySelectorAll('.card');
@@ -285,6 +289,26 @@ function loadGame() {
 
 }
 
+// Function to check local storage for a unique key
+  // if the key exists, that means there is a saved game in storage
+function checkForSavedGame(){
+  const serializedGameObj = getLocalStorageItemValue(localStorageGameKey)
+
+  // if there is a saved game object...
+  if (serializedGameObj){
+    gameObj = getObjectFromJSON(serializedGameObj)
+    if (gameObj.round >= maxRounds) {
+      removeLocalStorage(localStorageGameKey)
+    }
+    else {
+      if (confirm("Would you like to continue your previous game?")) {
+        totalScore = gameObj.score
+        roundNum = gameObj.round
+      }
+    }
+  }
+}
+
 // Function to start the game with initialized values
 function startGame(){
   // alert('Game has started');
@@ -296,6 +320,8 @@ function startGame(){
 function initNewGame(){
   roundNum = 0;
   totalScore = 0;
+
+  checkForSavedGame()
   
   shufflingInProgress = false;
 
@@ -359,6 +385,8 @@ function cardFlyIn(){
     count++
     if(cardCount == numCards){
       clearInterval(id)
+      playGameButtonElem.style.display = "inline-block"
+
     }
     if (count == 1 || count == 250 || count == 500 || count == 750){
       cardCount++
@@ -604,6 +632,7 @@ function createCard(cardItem){
   //--CLASSES AND IDs--
   // Add 'card' class to the card element
   addClassToElement(cardElem, 'card')
+  addClassToElement(cardElem, 'fly-in')
 
   // Add an Id to the card element using the id's we set earlier
   addIdToElement(cardElem, cardItem.id)
@@ -717,4 +746,45 @@ function mapCardIdToGridCell(card){
     else if(card.id == 4) {
       return '.card-pos-d';
   }
+}
+
+// --LOCAL STORAGE FUNCTIONALITY--
+// Javascript object --> JSON string --> Storage --> JSON string --> Javascript Object
+
+// Returning a JSON string for a Javascript object which will be stored locally
+function getSerializedObjectAsJSON(obj){
+  return JSON.stringify(obj)
+}
+
+// Reads the JSON formatted string from local storage
+function getObjectFromJSON(jsonstring){
+  return JSON.parse(jsonstring)
+}
+
+// Will be used to get the value associated with a specific key in the Local Storage
+function getLocalStorageItemValue(key){
+  return localStorage.getItem(key)
+}
+
+// Will be used to remove the JSON string from the local storage once we finish using it
+function removeLocalStorage(key){
+  localStorage.removeItem(key)
+}
+
+// Will be used to convert the JSON string back to a Javascript object
+function updateLocalStorage(key, value){
+  // Create a key that will store the JSON string within the local storage
+  localStorage.setItem(key,value)
+}
+
+// Will be used to store the score and the round to the local storage
+function updateGameObject(score,round){
+  gameObj.score = score
+  gameObj.round = round
+}
+
+// Calls the functions that save the game to the local storage
+function saveGameObjectToLocalStorage(score,round){
+  updateGameObject(score,round);
+  updateLocalStorage(localStorageGameKey, getSerializedObjectAsJSON(gameObj))
 }
